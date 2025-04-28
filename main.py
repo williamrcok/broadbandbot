@@ -1,4 +1,3 @@
-
 from fastapi import FastAPI
 from pydantic import BaseModel
 from playwright.sync_api import sync_playwright
@@ -13,7 +12,8 @@ class PostcodeRequest(BaseModel):
 # Function to check broadband using Playwright
 def check_broadband_availability(postcode: str) -> dict:
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True)
+        # Important: use --no-sandbox for Render deployment
+        browser = p.chromium.launch(headless=True, args=["--no-sandbox"])
         page = browser.new_page()
         try:
             page.goto("https://poptelecom.co.uk")
